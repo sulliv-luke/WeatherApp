@@ -22,7 +22,7 @@ function App() {
   const [todayForecast, setTodayForecast] = useState([]);
   const [fiveDayForecast, setFiveDayForecast] = useState(null);
   const [error, setError] = useState(null)
-  const [searchTerm, setSearchTerm] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('/Dublin%20City')
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   
