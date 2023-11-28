@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Euphoria+Script&display=swap');
+.navbar-wrap {
+    height: 100vh;
+    width: 200px; /* adjust as needed */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    background-color: whitesmoke;
+    top: 0;
+    left: 0;
+    padding: 20px 0;
+    box-shadow: 0px -3px 20px 5px gray;
+}
+
+.navbar-wrap > * {
+    font-family: Euphoria Script;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.dark-mode .navbar-wrap{
+    background-color: #333; /* adjust as needed */
+    box-shadow: 0px -3px 20px 5px rgba(128, 128, 128, 0.232);
+}
+
+.gitlab-logo {
+    height: 40px;
+}
+
+.atlassian-logo{
+    height: 40px;
+}
+
+@media (max-width: 600px) {
+    .navbar-wrap {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px 20px; /* added horizontal padding */
+        width: 100%;
+        height: auto;
+    }
+
+    .dark-mode .navbar-wrap{
+        background-color: #333; /* adjust as needed */
+        box-shadow: 0px -3px 20px 5px rgba(128, 128, 128, 0.232);
+    }
+
+    .navbar-wrap > * {
+        font-size: 2em;
+    }
+
+    .gitlab-logo {
+        height: 30px;
+    }
+
+    .atlassian-logo{
+        height: 30px;
+    }
+}
