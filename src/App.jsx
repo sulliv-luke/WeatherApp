@@ -25,6 +25,9 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('/Dublin%20City')
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
+  const [savedWeather, setSavedWeather] = useState([]);
+  const [savedForecast, setSavedForecast] = useState([]);
+  const [currentState, setCurrentState] = useState(0);
   
 
   useEffect(() => {
@@ -74,6 +77,26 @@ function App() {
     document.body.classList.toggle('dark-mode', newMode)
     document.body.classList.toggle('light-mode', !newMode)
   };
+  const handleSave = (weather,forecast) => {
+      if(!savedWeather.includes(weather)&&!savedForecast.includes(forecast)){
+          setSavedWeather((prev) =>[...prev,weather]);
+          setSavedForecast((prev)=>[...prev,forecast]);
+          alert("saved!!");
+      }
+      else{
+          alert("already saved")
+       }
+  };
+  const handleSwitch = () => {
+       setCurrentState(currentState === 0 ? 1 : 0);
+  };
+
+  const handleRemove =(weather,forecast) => {
+      const newWeather = savedWeather.filter((data1)=>data1!==weather);
+      const newForecast = savedForecast.filter((data2)=>data2!==forecast);
+      setSavedWeather(newWeather);
+      setSavedForecast(newForecast)
+   }
 
 
   return (
@@ -83,7 +106,7 @@ function App() {
         width: '100%',
         height: '100%',
         margin: '0 auto',
-        padding: '1rem 0 3rem',
+        padding: { xs: '5rem 0 3rem', sm: '1rem 0 3rem' },
         marginBottom: '1rem',
         borderRadius: {
           xs: 'none',
@@ -96,7 +119,20 @@ function App() {
       }}
     >
     <Navbar isDarkMode={isDarkMode}/>
+    <div style={{ display: 'flex', flexDirection: 'column', maxWidth:'22vw', marginLeft: '10px'}}>
+      <button onClick={() => handleSwitch()}>{currentState===0?("Favorites"):("Back")}</button>
+      {currentState===0 && (
+        <button onClick={() => handleSave(todayWeather,todayForecast)}
+              style={{
+                padding: '10px',
+                marginTop: '10px',
+              }}
+      >SAVE</button>
+      )}
+    </div>
     <Header />
+    {currentState === 0 && (
+    <>
     <SearchBar onSearch={handleSearch} isDarkMode={isDarkMode}/>
     <Box
       xs={12}
@@ -157,7 +193,35 @@ function App() {
           {error && <p>Error: {error.message}</p>}
         </div>
       </div>
+
     </Box>
+   </>
+   )}
+   {currentState === 1 && (
+    <>
+        {savedWeather.map((info, index) => (
+        <div key={index} style={{
+                               backgroundColor:'rgba(190, 216, 232, .5)',
+                               position: 'relative',
+                               marginBottom: '20px',
+                               borderRadius: '10px solid black' , // Apply border to the first element
+                               padding:  '10px' , // Add padding to the first element
+                             }}>
+           <TodayWeatherDetails data={info} forecastList={savedForecast[index]}/>
+
+           <button className = "removeButton"
+           onClick={() => handleRemove(info,savedForecast[index])}
+           style={{
+                 position: 'absolute',
+                 top: '40px',
+                 right: '10px',
+                 padding: '10px',
+               }}
+           >REMOVE</button>
+        </div>
+        ))}
+    </>
+    )}
     </Container>
   );
 }
