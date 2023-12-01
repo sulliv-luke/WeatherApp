@@ -35,36 +35,45 @@ function App() {
     setIsLoading(true);
     apiService.getWeatherNow(searchTerm)
       .then(response => {
+        if (!response.data) {
+          // If the response data is null, set the error message and stop further execution
+          setError('City not found');
+          console.error('City not found');
+          setIsLoading(false);
+          return; // This will prevent the execution of the rest of the code in this block
+        }
+
         setTodayWeather(response.data);
-          // Fetch 5-day weather forecast
+        // Fetch 5-day weather forecast
         apiService.getWeatherForecast(searchTerm)
-        .then(response => {
-         setFiveDayForecast(response.data);
+          .then(response => {
+            setFiveDayForecast(response.data);
 
-          // Check if response.data and response.data.list are defined
-          if (response.data && response.data.list) {
-            // Process the forecast data to get today's forecasts
-            const forecasts = response.data.list;
-            const today = new Date().toISOString().split('T')[0];
+            // Check if response.data and response.data.list are defined
+            if (response.data && response.data.list) {
+              // Process the forecast data to get today's forecasts
+              const forecasts = response.data.list;
+              const today = new Date().toISOString().split('T')[0];
 
-            const todayForecasts = forecasts.filter(forecast => {
-              return forecast.dt_txt.startsWith(today);
-            });
+              const todayForecasts = forecasts.filter(forecast => {
+                return forecast.dt_txt.startsWith(today);
+              });
 
-        setTodayForecast(todayForecasts);
-      }
-      setIsLoading(false);
-    })
-    .catch(error => {
-      setError(error);
-      console.error('There was an error fetching 5-day forecast!', error);
-    });
+              setTodayForecast(todayForecasts);
+            }
+            setIsLoading(false);
+          })
+          .catch(error => {
+            setError(error);
+            console.error('There was an error fetching 5-day forecast!', error);
+          });
       })
       .catch(error => {
         setError(error);
         console.error('There was an error fetching current weather!', error);
       });
-      }, [searchTerm]);
+  }, [searchTerm]);
+
   
 
   const handleSearch = (newSearchTerm) => {
@@ -78,7 +87,7 @@ function App() {
     document.body.classList.toggle('light-mode', !newMode)
   };
   const handleSave = (weather,forecast) => {
-      if(weather.length ===0 || forecast.length === 0){
+      if(weather===null || forecast.length === null){
             alert("error!!")
       }
       else if(!savedWeather.includes(weather)&&!savedForecast.includes(forecast)){
@@ -192,8 +201,6 @@ function App() {
               <p>Search for the weather in various different cities around the world!</p>
             )
           )}
-
-          {error && <p>Error: {error.message}</p>}
         </div>
       </div>
 
