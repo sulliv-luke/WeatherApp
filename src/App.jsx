@@ -78,7 +78,10 @@ function App() {
     document.body.classList.toggle('light-mode', !newMode)
   };
   const handleSave = (weather,forecast) => {
-      if(!savedWeather.includes(weather)&&!savedForecast.includes(forecast)){
+      if(weather.length ===0 || forecast.length === 0){
+            alert("error!!")
+      }
+      else if(!savedWeather.includes(weather)&&!savedForecast.includes(forecast)){
           setSavedWeather((prev) =>[...prev,weather]);
           setSavedForecast((prev)=>[...prev,forecast]);
           alert("saved!!");
